@@ -19,11 +19,35 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="00-setup.sql">
+        <FileNode Name="00-wideworldimporters-setup.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQL2016:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>(local)\SQL2016</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>00-setup.sql</FullPath>
+          <FullPath>00-wideworldimporters-setup.sql</FullPath>
+        </FileNode>
+        <FileNode Name="01-wideworldimporters-discovery.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>01-wideworldimporters-discovery.sql</FullPath>
+        </FileNode>
+        <FileNode Name="02-wwidw-setup-landing_wwi.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>02-wwidw-setup-landing_wwi.sql</FullPath>
+        </FileNode>
+        <FileNode Name="03-wwidw-setup-dimensions.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>03-wwidw-setup-dimensions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="04-wwidw-setup-facts.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>04-wwidw-setup-facts.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

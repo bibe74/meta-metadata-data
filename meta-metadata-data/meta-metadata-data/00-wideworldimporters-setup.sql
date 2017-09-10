@@ -1,4 +1,8 @@
 /*
+SET NOEXEC OFF;
+--*/ SET NOEXEC ON;
+
+/*
  * file: 00-setup.sql
 */
 
@@ -34,3 +38,4 @@ RESTORE DATABASE WideWorldImporters
     WITH REPLACE,
     STATS=10;
 GO
+
