@@ -6,24 +6,24 @@ SET NOEXEC OFF;
  * file: 02-wwidw-setup-landing_wwi.sql
 */
 
-USE master;
-GO
+----USE master;
+----GO
 
-/* If the database exists, drop it */
-IF DB_ID('WWIDW') IS NOT NULL
-BEGIN
-    ALTER DATABASE WWIDW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+----/* If the database exists, drop it */
+----IF DB_ID('WWIDW') IS NOT NULL
+----BEGIN
+----    ALTER DATABASE WWIDW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 
-    DROP DATABASE WWIDW;
-END
-GO
+----    DROP DATABASE WWIDW;
+----END
+----GO
 
-/* If the database doesn't exist (it shouldn't!), create it */
-IF DB_ID('WWIDW') IS NULL
-BEGIN
-    CREATE DATABASE WWIDW;
-END
-GO
+----/* If the database doesn't exist (it shouldn't!), create it */
+----IF DB_ID('WWIDW') IS NULL
+----BEGIN
+----    CREATE DATABASE WWIDW;
+----END
+----GO
 
 USE WWIDW;
 GO

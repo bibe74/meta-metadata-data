@@ -1,0 +1,63 @@
+<#@ template language="C#" tier="2" #>
+
+<#@ property name="metadataConnectionName" type="String" #>
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="landingSchema" type="String" #>
+<#@ property name="sourceDatabase" type="String" #>
+<#@ property name="sourceSchema" type="String" #>
+<#@ property name="sourceTable" type="String" #>
+
+<Package Name"DeployLandingTable_<#=landingSchema#>__<#=sourceSchema#>_<#=sourceTable#>" ConstraintMode="Linear">
+    <Tasks>
+        <ExecuteSQL Name="DropTableIfExists_<#=landingSchema#>__<#=sourceSchema#>_<#=sourceTable#>" ConnectionName="<#=metadataConnectionName#>">
+            <DirectInput>DROP TABLE IF EXISTS <#=landingSchema#>.<#=sourceSchema#>_<#=sourceTable#>;</DirectInput>
+        </ExecuteSQL>
+        <ExecuteSQL>
+            <DirectInput>
+                SELECT TOP 0
+<#
+        DataTable columns;
+    	columns = ExternalDataAccess.GetDataTable(
+    		metadataConnectionString,
+    		"SELECT SC.SourceColumn, SC.IsPrimaryKey FROM Setup.SourceColumns SC WHERE SC.SourceSchema = '" + sourceSchema + "' AND SC.SourceTable = '" + sourceTable + "' AND SC.UseForDataWarehouse = 1 ORDER BY SC.IsPrimaryKey DESC, SC.SourceColumnID;"
+    	);
+        String sep = "";
+
+    	foreach (DataRow row in columns.Rows)
+    	{
+        	String sourceColumn = row[0].ToString();
+        	String isPrimaryKey = row[1].ToString();
+#>
+                    <#=sep#><#=sourceColumn#>
+<#
+            sep = ", ";
+    	}
+#>
+                INTO <#=landingSchema#>.<#=sourceSchema#>_<#=sourceTable#>
+                FROM <#=sourceDatabase#>.<#=sourceSchema#>.<#=sourceTable#>;
+                
+                ALTER TABLE <#=landingSchema#>.<#=sourceSchema#>_<#=sourceTable#> ADD CONSTRAINT PK_<#=landingSchema#>_<#=sourceSchema#>_<#=sourceTable#> PRIMARY KEY CLUSTERED (
+<#
+    	columns = ExternalDataAccess.GetDataTable(
+    		metadataConnectionString,
+    		"SELECT SC.SourceColumn, SC.IsPrimaryKey FROM Setup.SourceColumns SC WHERE SC.SourceSchema = '" + sourceSchema + "' AND SC.SourceTable = '" + sourceTable + "' AND SC.UseForDataWarehouse = 1 AND SC.IsPrimaryKey = 1 ORDER BY SC.IsPrimaryKey DESC, SC.SourceColumnID;"
+    	);
+    	sep = "";
+    
+    	foreach (DataRow row in columns.Rows)
+    	{
+        	String sourceColumn = row[0].ToString();
+        	String isPrimaryKey = row[1].ToString();
+#>
+                    <#=sep#><#=sourceColumn#>
+<#
+    	
+    	    sep = ", ";
+    	}
+#>
+                );
+            </DirectInput>
+        </ExecuteSQL>
+    </Tasks>            
+</Package>
+<#@import namespace="System.Data" #>

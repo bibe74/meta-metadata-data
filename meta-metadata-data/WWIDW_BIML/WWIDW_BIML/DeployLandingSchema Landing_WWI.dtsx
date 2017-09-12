@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="09/12/2017 23:06:32" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="HARDY" DTS:CreatorName="bs_turelli" DTS:DTSID="{518AB57B-44C1-47DF-B6C8-FB8D1E96E9B8}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="DeployLandingSchema Landing_WWI" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{9D697B46-2484-47F2-8C18-4197354BD2E6}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:CreationName="OLEDB" DTS:DTSID="{565FADFE-8D4E-4919-8369-968B2201A0DC}" DTS:ObjectName="WWIDW" DTS:refId="Package.ConnectionManagers[WWIDW]">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="data source=.\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False"></DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C96BE43B-4B02-48D5-8CDD-90431646B0DA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="CreateSchema_Landing_WWI" DTS:refId="Package\CreateSchema_Landing_WWI" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="WWIDW" SQLTask:SqlStatementSource="&#xA;                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'Landing_WWI')&#xA;                    BEGIN&#xA;                     EXEC ('CREATE SCHEMA Landing_WWI AUTHORIZATION dbo;');&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{7584F1D5-14E2-4344-B219-45C996E162C3}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Application_Cities" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Application_Cities" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Application_Cities.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{AB8F145E-6449-4E22-AF1D-D170F267ABB8}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Application_Countries" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Application_Countries" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Application_Countries.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{A8C1BFA8-446F-48F8-980D-51BF307A79B4}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Application_StateProvinces.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{E1F02423-8E44-41DC-A7B2-ED037FB5F547}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Sales_Customers" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Sales_Customers" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Sales_Customers.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{9EADF88C-96E3-49BF-A56F-8FE3300E432E}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Sales_OrderLines.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DelayValidation="True" DTS:DTSID="{FFD2ABEC-B8DC-40E0-A542-8C101A3ED2F1}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="EPT Run DeployLandingTable Landing_WWI__Sales_Orders" DTS:refId="Package\EPT Run DeployLandingTable Landing_WWI__Sales_Orders" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <PackageName>DeployLandingTable Landing_WWI__Sales_Orders.dtsx</PackageName>
+          <UseProjectReference>True</UseProjectReference>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{EAFCCF71-C4A0-4B28-AE81-403DC5C732C0}" DTS:From="Package\CreateSchema_Landing_WWI" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_CreateSchema_Landing_WWI_To_EPT Run DeployLandingTable Landing_WWI__Application_Cities" DTS:refId="Package.PrecedenceConstraints[Constraint_CreateSchema_Landing_WWI_To_EPT Run DeployLandingTable Landing_WWI__Application_Cities]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Application_Cities"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F1CB2BDF-E196-4111-B904-03CF8330C5DE}" DTS:From="Package\EPT Run DeployLandingTable Landing_WWI__Application_Cities" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_EPT Run DeployLandingTable Landing_WWI__Application_Cities_To_EPT Run DeployLandingTable Landing_WWI__Application_Countries" DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run DeployLandingTable Landing_WWI__Application_Cities_To_EPT Run DeployLandingTable Landing_WWI__Application_Countries]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Application_Countries"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{69A6C987-CBBF-4700-B2FC-A71045F5533E}" DTS:From="Package\EPT Run DeployLandingTable Landing_WWI__Application_Countries" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_EPT Run DeployLandingTable Landing_WWI__Application_Countries_To_EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces" DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run DeployLandingTable Landing_WWI__Application_Countries_To_EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{288A2715-B84F-4FCE-B423-5FEE043306F5}" DTS:From="Package\EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces_To_EPT Run DeployLandingTable Landing_WWI__Sales_Customers" DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run DeployLandingTable Landing_WWI__Application_StateProvinces_To_EPT Run DeployLandingTable Landing_WWI__Sales_Customers]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Sales_Customers"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{CD7046B4-1C1D-460C-9671-13B6D3F8E161}" DTS:From="Package\EPT Run DeployLandingTable Landing_WWI__Sales_Customers" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_EPT Run DeployLandingTable Landing_WWI__Sales_Customers_To_EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines" DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run DeployLandingTable Landing_WWI__Sales_Customers_To_EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{100AF63A-3ED5-4D10-996B-6C9B2366FD2C}" DTS:From="Package\EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines_To_EPT Run DeployLandingTable Landing_WWI__Sales_Orders" DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run DeployLandingTable Landing_WWI__Sales_OrderLines_To_EPT Run DeployLandingTable Landing_WWI__Sales_Orders]" DTS:To="Package\EPT Run DeployLandingTable Landing_WWI__Sales_Orders"></DTS:PrecedenceConstraint>
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>

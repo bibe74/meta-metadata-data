@@ -1,0 +1,48 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionName" type="String" #>
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="landingSchema" type="String" #>
+<#@ property name="sourceDatabase" type="String" #>
+
+<#
+    DataTable tables;
+    tables = ExternalDataAccess.GetDataTable(
+    	metadataConnectionString,
+    	"SELECT ST.SourceSchema, ST.SourceTable FROM Setup.SourceDatabases SD INNER JOIN Setup.SourceTables ST ON ST.SourceDatabaseID = SD.SourceDatabaseID WHERE SD.LandingSchema = '" + landingSchema + "'AND ST.UseForDataWarehouse = 1 ORDER BY ST.SourceSchema, ST.SourceTable"
+    );
+    
+    foreach (DataRow row in tables.Rows)
+    {
+    	String sourceSchema = row[0].ToString();
+    	String sourceTable = row[1].ToString();
+#>
+            <#=CallBimlScript("00-deploy-02-drop-and-create-landing-table.biml", metadataConnectionName, metadataConnectionString, landingSchema, sourceDatabase, sourceSchema, sourceTable)#>
+<#
+    }
+#>
+    <Package Name="DeployLandingSchema <#=landingSchema#>" ConstraintMode="Linear">
+        <Tasks>
+            <ExecuteSQL Name="CreateSchema_<#=landingSchema#>" ConnectionName="<#=metadataConnectionName#>">
+                <DirectInput>
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'<#=landingSchema#>')
+                    BEGIN
+                    	EXEC ('CREATE SCHEMA <#=landingSchema#> AUTHORIZATION dbo;');
+                    END;
+                </DirectInput>
+            </ExecuteSQL>
+<#
+    foreach (DataRow row in tables.Rows)
+    {
+    	String sourceSchema = row[0].ToString();
+    	String sourceTable = row[1].ToString();
+#>
+            <ExecutePackage Name="EPT Run DeployLandingTable <#=landingSchema#>__<#=sourceSchema#>_<#=sourceTable#>" DelayValidation="true">
+                <ExternalProjectPackage Package="DeployLandingTable <#=landingSchema#>__<#=sourceSchema#>_<#=sourceTable#>.dtsx"></ExternalProjectPackage>
+            </ExecutePackage>    
+<#
+    }
+#>
+        </Tasks>
+    </Package>
+<#@import namespace="System.Data" #>

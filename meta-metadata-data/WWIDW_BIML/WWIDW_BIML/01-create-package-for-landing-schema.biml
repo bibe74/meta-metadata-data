@@ -1,0 +1,25 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="landingSchema" type="String" #>
+
+	<#
+    DataTable tables;
+	tables = ExternalDataAccess.GetDataTable(
+		metadataConnectionString,
+		"SELECT ST.SourceSchema, ST.SourceTable FROM Setup.SourceDatabases SD INNER JOIN Setup.SourceTables ST ON ST.SourceDatabaseID = SD.SourceDatabaseID WHERE SD.LandingSchema = '" + landingSchema + "'AND ST.UseForDataWarehouse = 1 ORDER BY ST.SourceSchema, ST.SourceTable"
+	);
+
+	foreach (DataRow row in tables.Rows)
+	{
+    	String sourceSchema = row[0].ToString();
+    	String sourceTable = row[1].ToString();
+    #>
+        <#=CallBimlScript("02-create-package-for-landing-table.biml", metadataConnectionString, landingSchema, sourceSchema, sourceTable)#>
+	<#
+	}
+	#>
+
+<Package Name="Merge_Schema_<#=landingSchema#>" />
+
+<#@import namespace="System.Data" #>

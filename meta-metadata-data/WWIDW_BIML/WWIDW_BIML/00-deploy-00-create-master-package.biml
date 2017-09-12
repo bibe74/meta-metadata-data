@@ -1,0 +1,47 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<Connections>
+<#
+    string metadataConnectionName = "WWIDW";
+    string metadataConnectionString = @"Data Source=.\SQL2016;Initial Catalog=WWIDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
+    DataTable sourceDatabases;
+    string landingSchema;
+    string sourceDatabase;
+    string sourceConnectionName;
+    string sourceConnectionString;
+    sourceDatabases = ExternalDataAccess.GetDataTable(
+        metadataConnectionString,
+        "SELECT LandingSchema, SourceDatabase, SourceConnectionName, SourceConnectionString FROM Setup.SourceDatabases;"
+    );
+    
+#>
+            <OleDbConnection Name="<#=metadataConnectionName#>" ConnectionString="<#=metadataConnectionString#>" />
+<#
+    foreach (DataRow row in sourceDatabases.Rows)
+    {
+        landingSchema = row[0].ToString();
+        sourceDatabase = row[1].ToString();
+        sourceConnectionName = row[2].ToString();
+        sourceConnectionString = row[3].ToString();
+        #>
+            <OleDbConnection Name="<#=sourceConnectionName#>" ConnectionString="<#=sourceConnectionString#>" />
+        <#
+    }
+#>
+</Connections>
+<Packages>
+<#
+    foreach (DataRow row in sourceDatabases.Rows)
+    {
+        landingSchema = row[0].ToString();
+        sourceDatabase = row[1].ToString();
+        sourceConnectionName = row[2].ToString();
+        sourceConnectionString = row[3].ToString();
+        #>
+            <#=CallBimlScript("00-deploy-01-create-package-for-landing-schema.biml", metadataConnectionName, metadataConnectionString, landingSchema, sourceDatabase)#>
+        <#
+    }
+#>
+</Packages>
+</Biml>
+<#@template language="C#" hostspecific="true"#>
+<#@import namespace="System.Data" #>

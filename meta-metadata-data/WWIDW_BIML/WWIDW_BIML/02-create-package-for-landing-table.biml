@@ -1,0 +1,30 @@
+<#@ template language="C#" tier="2" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="landingSchema" type="String" #>
+<#@ property name="sourceSchema" type="String" #>
+<#@ property name="sourceTable" type="String" #>
+
+    <Package Name="Merge_<#=landingSchema#>_Table_<#=sourceSchema#>_<#=sourceTable#>">
+    <Tasks>
+        <ExecuteSQL Name="Truncate_<#=landingSchema#>___<#=sourceSchema#>_<#=sourceTable#>" ConnectionName="<#=landingSchema#>">
+            <DirectInput>TRUNCATE <#=landingSchema#>.<#=sourceSchema#>_<#=sourceTable#>;</DirectInput>
+        </ExecuteSQL>
+    	<#
+        DataTable tables;
+    	tables = ExternalDataAccess.GetDataTable(
+    		metadataConnectionString,
+    		"SELECT SC.SourceColumn, SC.IsPrimaryKey FROM Setup.SourceColumns SC WHERE SC.SourceSchema = '" + sourceSchema + "' AND SC.SourceTable = '" + sourceTable + "' AND SC.UseForDataWarehouse = 1 ORDER BY SC.IsPrimaryKey DESC, SC.SourceColumnID;"
+    	);
+    
+    	foreach (DataRow row in tables.Rows)
+    	{
+        	String sourceColumn = row[0].ToString();
+        	String isPrimaryKey = row[1].ToString();
+    
+    	}
+    	#>
+    </Tasks>            
+    </Package>
+
+<#@import namespace="System.Data" #>

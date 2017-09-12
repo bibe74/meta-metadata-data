@@ -1,0 +1,43 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<Connections>
+    <#
+        string metadataConnectionString = @"Data Source=.\SQL2016;Initial Catalog=WWIDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
+        DataTable landingSchemata;
+        string landingSchema;
+        string sourceConnectionString;
+        
+        landingSchemata = ExternalDataAccess.GetDataTable(
+            metadataConnectionString,
+            "SELECT LandingSchema, SourceConnectionString FROM Setup.SourceDatabases;"
+        );
+        
+        foreach (DataRow row in landingSchemata.Rows)
+        {
+            landingSchema = row[0].ToString();
+            sourceConnectionString = row[1].ToString();
+        #>
+            <OleDbConnection Name="<#=landingSchema#>" ConnectionString="<#=sourceConnectionString#>" />
+        <#
+        }
+    #>
+</Connections>
+<Packages>
+    <#
+        landingSchemata = ExternalDataAccess.GetDataTable(
+            metadataConnectionString,
+            "SELECT LandingSchema, SourceConnectionString FROM Setup.SourceDatabases;"
+        );
+        
+        foreach (DataRow row in landingSchemata.Rows)
+        {
+            landingSchema = row[0].ToString();
+            sourceConnectionString = row[1].ToString();
+        #>
+            <#=CallBimlScript("01-create-package-for-landing-schema.biml", metadataConnectionString, landingSchema)#>>
+        <#
+        }
+    #>
+</Packages>
+</Biml>
+<#@template language="C#" hostspecific="true"#>
+<#@import namespace="System.Data" #>
