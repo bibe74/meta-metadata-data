@@ -1,0 +1,19 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="sourceDatabaseID" type="String" #>
+<#@ property name="destinationDatabase" type="String" #>
+
+    <Package Name="Deploy_DestinationDatabase_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" ConstraintMode="Linear">
+        <Tasks>
+            <ExecuteSQL Name="CreateDatabase_<#=destinationDatabase#>" ConnectionName="Metadata">
+                <DirectInput>
+                    IF DB_ID(N'<#=destinationDatabase#>') IS NULL
+                    BEGIN
+                    	EXEC ('CREATE DATABASE <#=destinationDatabase#>;');
+                    END;
+                </DirectInput>
+            </ExecuteSQL>
+        </Tasks>
+    </Package>
+<#@import namespace="System.Data" #>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/14/2017 11:22:27 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HARDY"
+  DTS:CreatorName="bs_turelli"
+  DTS:DTSID="{9FF56427-458C-4D8F-A8BE-B59632A63B44}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0800.90"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Deploy_LandingTables_1_Landing_WWI_Sales_OrderLines"
+  DTS:VersionGUID="{64E2105D-CE1F-4D93-ACE9-A2425CF36FCF}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[WWIDW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{DF77251A-03A3-4481-8100-649225F88B19}"
+      DTS:ObjectName="WWIDW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="data source=(local)\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CreateTable_WWIDW_Landing_WWI_Sales_OrderLines"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{356B58F7-7992-40F4-978E-D807F44E4C51}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateTable_WWIDW_Landing_WWI_Sales_OrderLines"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{DF77251A-03A3-4481-8100-649225F88B19}"
+          SQLTask:SqlStatementSource="&#xA;                    IF OBJECT_ID(N'Landing_WWI.Sales_OrderLines', N'U') IS NULL&#xA;                    BEGIN&#xA;&#xA;                        SELECT TOP 0&#xA;                            OrderLineID&#xA;                            , OrderID&#xA;                            , Quantity&#xA;                            , UnitPrice&#xA;                        INTO Landing_WWI.Sales_OrderLines&#xA;                        FROM WideWorldImporters.Sales.OrderLines;&#xA;                        &#xA;                        ALTER TABLE Landing_WWI.Sales_OrderLines ADD CONSTRAINT PK_Landing_WWI_Sales_OrderLines PRIMARY KEY CLUSTERED (&#xA;                            OrderLineID&#xA;                        );&#xA;&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

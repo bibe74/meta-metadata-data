@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/14/2017 11:36:12 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HARDY"
+  DTS:CreatorName="bs_turelli"
+  DTS:DTSID="{B5085F8A-3D04-4BD9-AAD1-CD969608E5CD}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0800.90"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Deploy_DestinationDatabase_1"
+  DTS:VersionGUID="{162CB9DC-F491-4299-A6E8-1D14AFAC7A8C}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Metadata]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F130CC4E-2B37-4672-929F-E2E37842E0FD}"
+      DTS:ObjectName="Metadata">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="data source=.\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CreateDatabase_WWIDW"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{1275D21B-5BE8-4D7B-976A-8E2B232A1459}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateDatabase_WWIDW"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F130CC4E-2B37-4672-929F-E2E37842E0FD}"
+          SQLTask:SqlStatementSource="&#xA;                    IF DB_ID(N'WWIDW') IS NULL&#xA;                    BEGIN&#xA;                     EXEC ('CREATE DATABASE WWIDW;');&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

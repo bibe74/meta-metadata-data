@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="09/14/2017 23:51:11" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="HARDY" DTS:CreatorName="bs_turelli" DTS:DTSID="{C659B309-216A-496A-BF96-6135BEDC849F}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="Deploy_DestinationDatabase_1" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{A219FC2B-271C-439B-A033-4891BFAEA20E}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:CreationName="OLEDB" DTS:DTSID="{A8459B3B-739F-45F2-93FB-FA383AF3329D}" DTS:ObjectName="Metadata" DTS:refId="Package.ConnectionManagers[Metadata]">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="data source=.\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False"></DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{A6ABBDD0-D3B3-48E5-91EA-5FDE60A35EB5}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="CreateDatabase_WWIDW" DTS:refId="Package\CreateDatabase_WWIDW" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="Metadata" SQLTask:SqlStatementSource="&#xA;                    IF DB_ID(N'WWIDW') IS NULL&#xA;                    BEGIN&#xA;                     EXEC ('CREATE DATABASE WWIDW;');&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

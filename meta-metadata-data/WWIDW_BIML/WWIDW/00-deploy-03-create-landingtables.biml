@@ -1,0 +1,80 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="sourceDatabaseID" type="String" #>
+<#@ property name="destinationDatabase" type="String" #>
+<#@ property name="destinationLandingSchema" type="String" #>
+
+    <Package Name="Deploy_LandingTables_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey">
+        <Tasks>
+<#
+    DataTable tables;
+    tables = ExternalDataAccess.GetDataTable(
+    	metadataConnectionString,
+    	"SELECT SD.SourceDatabase, ST.SourceSchema, ST.SourceTable FROM Setup.SourceDatabases SD INNER JOIN Setup.SourceTables ST ON ST.SourceDatabaseID = SD.SourceDatabaseID WHERE SD.DestinationLandingSchema = '" + destinationLandingSchema + "'AND ST.UseForDataWarehouse = 1 ORDER BY ST.SourceSchema, ST.SourceTable"
+    );
+    
+    foreach (DataRow row in tables.Rows)
+    {
+    	String sourceDatabase = row[0].ToString();
+    	String sourceSchema = row[1].ToString();
+    	String sourceTable = row[2].ToString();
+        String destinationFullTableName = sourceSchema + '_' + sourceTable;
+#>
+            <ExecuteSQL Name="CreateTable_<#=destinationDatabase#>_<#=destinationLandingSchema#>_<#=destinationFullTableName#>" ConnectionName="<#=destinationDatabase#>">
+                <DirectInput>
+                    IF OBJECT_ID(N'<#=destinationLandingSchema#>.<#=destinationFullTableName#>', N'U') IS NULL
+                    BEGIN
+    
+                        SELECT TOP 0
+<#
+        DataTable columns;
+        columns = ExternalDataAccess.GetDataTable(
+            metadataConnectionString,
+            "SELECT SC.SourceColumn, SC.IsPrimaryKey FROM Setup.SourceColumns SC WHERE SC.SourceSchema = '" + sourceSchema + "' AND SC.SourceTable = '" + sourceTable + "' AND SC.UseForDataWarehouse = 1 ORDER BY SC.IsPrimaryKey DESC, SC.SourceColumnID;"
+        );
+        String sep = "";
+        
+        foreach (DataRow row2 in columns.Rows)
+        {
+            String sourceColumn = row2[0].ToString();
+            String isPrimaryKey = row2[1].ToString();
+#>
+                            <#=sep#><#=sourceColumn#>
+<#
+            sep = ", ";
+    	}
+#>
+                        INTO <#=destinationLandingSchema#>.<#=destinationFullTableName#>
+                        FROM <#=sourceDatabase#>.<#=sourceSchema#>.<#=sourceTable#>;
+                        
+                        ALTER TABLE <#=destinationLandingSchema#>.<#=destinationFullTableName#> ADD CONSTRAINT PK_<#=destinationLandingSchema#>_<#=destinationFullTableName#> PRIMARY KEY CLUSTERED (
+<#
+    	columns = ExternalDataAccess.GetDataTable(
+    		metadataConnectionString,
+    		"SELECT SC.SourceColumn, SC.IsPrimaryKey FROM Setup.SourceColumns SC WHERE SC.SourceSchema = '" + sourceSchema + "' AND SC.SourceTable = '" + sourceTable + "' AND SC.UseForDataWarehouse = 1 AND SC.IsPrimaryKey = 1 ORDER BY SC.IsPrimaryKey DESC, SC.SourceColumnID;"
+    	);
+    	sep = "";
+    
+    	foreach (DataRow row2 in columns.Rows)
+    	{
+        	String sourceColumn = row2[0].ToString();
+        	String isPrimaryKey = row2[1].ToString();
+#>
+                            <#=sep#><#=sourceColumn#>
+<#
+    	
+    	    sep = ", ";
+    	}
+#>
+                        );
+
+                    END;
+                </DirectInput>
+            </ExecuteSQL>
+<#
+    }
+#>
+        </Tasks>
+    </Package>
+<#@import namespace="System.Data" #>

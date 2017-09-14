@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="09/14/2017 23:51:11" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="HARDY" DTS:CreatorName="bs_turelli" DTS:DTSID="{CC0A712E-0701-42DB-876F-DE7DA25FDB54}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="Deploy_LandingSchema_1" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{1B192D48-9BC8-4706-B76C-F26EF4BE399B}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:CreationName="OLEDB" DTS:DTSID="{92F866CF-57D7-47AE-83F9-D7522E7F3F92}" DTS:ObjectName="WWIDW" DTS:refId="Package.ConnectionManagers[WWIDW]">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="data source=(local)\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False"></DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{60C89ED4-9CBA-46E0-8DF8-93278138D087}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="CreateSchema_WWIDW_Landing_WWI" DTS:refId="Package\CreateSchema_WWIDW_Landing_WWI" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="WWIDW" SQLTask:SqlStatementSource="&#xA;                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'Landing_WWI')&#xA;                    BEGIN&#xA;                     EXEC ('CREATE SCHEMA Landing_WWI AUTHORIZATION dbo;');&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

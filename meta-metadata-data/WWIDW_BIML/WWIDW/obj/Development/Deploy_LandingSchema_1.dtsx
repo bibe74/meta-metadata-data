@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/14/2017 11:36:12 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HARDY"
+  DTS:CreatorName="bs_turelli"
+  DTS:DTSID="{D3748AE9-D85C-4D1F-826E-149D60D3D376}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0800.90"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Deploy_LandingSchema_1"
+  DTS:VersionGUID="{786230B9-758B-4FAF-991E-821ECECEDF30}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[WWIDW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{B1FA47F2-BB2F-4FDE-A2ED-C9305A7E1D39}"
+      DTS:ObjectName="WWIDW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="data source=(local)\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CreateSchema_WWIDW_Landing_WWI"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{F915191D-A964-485D-BBD3-0E274B1913AE}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateSchema_WWIDW_Landing_WWI"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B1FA47F2-BB2F-4FDE-A2ED-C9305A7E1D39}"
+          SQLTask:SqlStatementSource="&#xA;                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'Landing_WWI')&#xA;                    BEGIN&#xA;                     EXEC ('CREATE SCHEMA Landing_WWI AUTHORIZATION dbo;');&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

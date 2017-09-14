@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/14/2017 11:36:12 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HARDY"
+  DTS:CreatorName="bs_turelli"
+  DTS:DTSID="{E457EB3F-9754-4002-9A6E-82DC9B2ACA71}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0800.90"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Deploy_master_1"
+  DTS:VersionGUID="{F318F6CB-D048-40BC-B5E8-B5A14BD68970}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\EPT Run Deploy_DestinationDatabase_1"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{FC438C48-1512-4790-AD1D-1B2B16477825}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EPT Run Deploy_DestinationDatabase_1"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Deploy_DestinationDatabase_1.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\EPT Run Deploy_DWSchemata_1"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{2A88ECE5-5F27-4BAF-9343-1F67B82A834A}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EPT Run Deploy_DWSchemata_1"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Deploy_DWSchemata_1.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\EPT Run Deploy_DWTables_1"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{56D818EC-5678-4894-BEDD-CCC0039B01F7}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EPT Run Deploy_DWTables_1"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Deploy_DWTables_1.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\EPT Run Deploy_LandingSchema_1"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{D583F951-A338-4758-ADB6-02F7183E55FF}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EPT Run Deploy_LandingSchema_1"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Deploy_LandingSchema_1.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\EPT Run Deploy_LandingTables_1"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{D631B42C-3E6C-41C7-8B4C-5458B3A2D922}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EPT Run Deploy_LandingTables_1"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Deploy_LandingTables_1.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run Deploy_DestinationDatabase_1_To_EPT Run Deploy_LandingSchema_1]"
+      DTS:CreationName=""
+      DTS:DTSID="{8AB0D4FE-9021-44B3-BADA-74A92E0542E8}"
+      DTS:From="Package\EPT Run Deploy_DestinationDatabase_1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_EPT Run Deploy_DestinationDatabase_1_To_EPT Run Deploy_LandingSchema_1"
+      DTS:To="Package\EPT Run Deploy_LandingSchema_1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run Deploy_DWSchemata_1_To_EPT Run Deploy_DWTables_1]"
+      DTS:CreationName=""
+      DTS:DTSID="{B02DC515-2169-4C14-BE29-2D632A86B81E}"
+      DTS:From="Package\EPT Run Deploy_DWSchemata_1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_EPT Run Deploy_DWSchemata_1_To_EPT Run Deploy_DWTables_1"
+      DTS:To="Package\EPT Run Deploy_DWTables_1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run Deploy_LandingSchema_1_To_EPT Run Deploy_LandingTables_1]"
+      DTS:CreationName=""
+      DTS:DTSID="{F51F8880-0792-43B6-A463-9585348A8021}"
+      DTS:From="Package\EPT Run Deploy_LandingSchema_1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_EPT Run Deploy_LandingSchema_1_To_EPT Run Deploy_LandingTables_1"
+      DTS:To="Package\EPT Run Deploy_LandingTables_1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_EPT Run Deploy_LandingTables_1_To_EPT Run Deploy_DWSchemata_1]"
+      DTS:CreationName=""
+      DTS:DTSID="{62E1A9BD-1BA0-4037-AD6C-B7E07DD77160}"
+      DTS:From="Package\EPT Run Deploy_LandingTables_1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_EPT Run Deploy_LandingTables_1_To_EPT Run Deploy_DWSchemata_1"
+      DTS:To="Package\EPT Run Deploy_DWSchemata_1" />
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>

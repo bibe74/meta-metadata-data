@@ -1,0 +1,34 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="sourceDatabaseID" type="String" #>
+<#@ property name="destinationDatabase" type="String" #>
+<#@ property name="destinationLandingSchema" type="String" #>
+
+    <Package Name="Deploy_DWSchemata_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" />
+        <Tasks>
+<#
+    DataTable tables;
+    tables = ExternalDataAccess.GetDataTable(
+    	metadataConnectionString,
+    	"SELECT DISTINCT ST.DataWarehouseSchema FROM Setup.SourceTables ST WHERE ST.SourceDatabaseID = " + sourceDatabaseID + " AND ST.UseForDataWarehouse = 1 AND ST.PublishToDataWarehouse = 1 ORDER BY ST.DataWarehouseSchema"
+    );
+    
+    foreach (DataRow row in tables.Rows)
+    {
+    	String dataWarehouseSchema = row[0].ToString();
+#>
+            <ExecuteSQL Name="CreateSchema_<#=destinationDatabase#>_<#=dataWarehouseSchema#>" ConnectionName="<#=destinationDatabase#>">
+                <DirectInput>
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'<#=dataWarehouseSchema#>')
+                    BEGIN
+                    	EXEC ('CREATE SCHEMA <#=dataWarehouseSchema#> AUTHORIZATION dbo;');
+                    END;
+                </DirectInput>
+            </ExecuteSQL>
+<#
+    }
+#>
+        </Tasks>
+    </Package>
+<#@import namespace="System.Data" #>

@@ -1,0 +1,20 @@
+<#@ template language="C#" tier="1" #>
+
+<#@ property name="metadataConnectionString" type="String" #>
+<#@ property name="sourceDatabaseID" type="String" #>
+<#@ property name="destinationDatabase" type="String" #>
+<#@ property name="destinationLandingSchema" type="String" #>
+
+    <Package Name="Deploy_LandingSchema_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" ConstraintMode="Linear">
+        <Tasks>
+            <ExecuteSQL Name="CreateSchema_<#=destinationDatabase#>_<#=destinationLandingSchema#>" ConnectionName="<#=destinationDatabase#>">
+                <DirectInput>
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = N'<#=destinationLandingSchema#>')
+                    BEGIN
+                    	EXEC ('CREATE SCHEMA <#=destinationLandingSchema#> AUTHORIZATION dbo;');
+                    END;
+                </DirectInput>
+            </ExecuteSQL>
+        </Tasks>
+    </Package>
+<#@import namespace="System.Data" #>

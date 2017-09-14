@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/14/2017 11:22:27 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HARDY"
+  DTS:CreatorName="bs_turelli"
+  DTS:DTSID="{BBBE5960-410F-45B0-994E-A72AD4A71F48}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0800.90"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Deploy_LandingTables_1_Landing_WWI_Application_Cities"
+  DTS:VersionGUID="{B9E59D1D-CBDA-4470-B89E-0DE8245B0B96}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[WWIDW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{85EF3C3F-A4CF-4FFD-8685-1E013856F641}"
+      DTS:ObjectName="WWIDW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="data source=(local)\SQL2016;initial catalog=WWIDW;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CreateTable_WWIDW_Landing_WWI_Application_Cities"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{46DF5FF6-F15E-4DEB-A471-502E8E65E3A6}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateTable_WWIDW_Landing_WWI_Application_Cities"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{85EF3C3F-A4CF-4FFD-8685-1E013856F641}"
+          SQLTask:SqlStatementSource="&#xA;                    IF OBJECT_ID(N'Landing_WWI.Application_Cities', N'U') IS NULL&#xA;                    BEGIN&#xA;&#xA;                        SELECT TOP 0&#xA;                            CityID&#xA;                            , CityName&#xA;                            , StateProvinceID&#xA;                        INTO Landing_WWI.Application_Cities&#xA;                        FROM WideWorldImporters.Application.Cities;&#xA;                        &#xA;                        ALTER TABLE Landing_WWI.Application_Cities ADD CONSTRAINT PK_Landing_WWI_Application_Cities PRIMARY KEY CLUSTERED (&#xA;                            CityID&#xA;                        );&#xA;&#xA;                    END;&#xA;                " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

@@ -1,0 +1,73 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <#
+            string metadataConnectionString = @"Data Source=.\SQL2016;Initial Catalog=WWIDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
+            DataTable sourceDatabases;
+            string sourceDatabaseID;
+            string sourceDatabase;
+            string sourceConnectionString;
+            string destinationDatabase;
+            string destinationLandingSchema;
+            
+            sourceDatabases = ExternalDataAccess.GetDataTable(
+                metadataConnectionString,
+                "SELECT DISTINCT SourceDatabase, SourceConnectionString FROM Setup.SourceDatabases UNION SELECT DestinationDatabase, DestinationConnectionString FROM Setup.SourceDatabases;"
+            );
+        #>
+        <OleDbConnection Name="Metadata" ConnectionString="<#=metadataConnectionString#>" />
+        <#
+            foreach (DataRow row in sourceDatabases.Rows)
+            {
+                sourceDatabase = row[0].ToString();
+                sourceConnectionString = row[1].ToString();
+        #>
+        <OleDbConnection Name="<#=sourceDatabase#>" ConnectionString="<#=sourceConnectionString#>" />
+        <#
+            }
+        #>
+    </Connections>
+    <Packages>
+        <#
+            sourceDatabases = ExternalDataAccess.GetDataTable(
+                metadataConnectionString,
+                "SELECT SourceDatabaseID, SourceDatabase, DestinationDatabase, DestinationlandingSchema FROM Setup.SourceDatabases;"
+            );
+            
+            foreach (DataRow row in sourceDatabases.Rows)
+            {
+                sourceDatabaseID = row[0].ToString();
+                sourceDatabase = row[1].ToString();
+                destinationDatabase = row[2].ToString();
+                destinationLandingSchema = row[3].ToString();
+        #>
+        <#=CallBimlScript("00-deploy-01-create-destinationdatabase.biml", metadataConnectionString, sourceDatabaseID, destinationDatabase)#>
+        <#=CallBimlScript("00-deploy-02-create-landingschema.biml", metadataConnectionString, sourceDatabaseID, destinationDatabase, destinationLandingSchema)#>
+        <#=CallBimlScript("00-deploy-03-create-landingtables.biml", metadataConnectionString, sourceDatabaseID, destinationDatabase, destinationLandingSchema)#>
+        <Package Name="Deploy_DWSchemata_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" />
+        <Package Name="Deploy_DWTables_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" />
+        <Package Name="Deploy_master_<#=sourceDatabaseID#>" ProtectionLevel="EncryptSensitiveWithUserKey" ConstraintMode="Linear">
+            <Tasks>
+                <ExecutePackage Name="EPT Run Deploy_DestinationDatabase_<#=sourceDatabaseID#>" DelayValidation="true">
+                    <ExternalProjectPackage Package="Deploy_DestinationDatabase_<#=sourceDatabaseID#>.dtsx"></ExternalProjectPackage>
+                </ExecutePackage>    
+                <ExecutePackage Name="EPT Run Deploy_LandingSchema_<#=sourceDatabaseID#>" DelayValidation="true">
+                    <ExternalProjectPackage Package="Deploy_LandingSchema_<#=sourceDatabaseID#>.dtsx"></ExternalProjectPackage>
+                </ExecutePackage>    
+                <ExecutePackage Name="EPT Run Deploy_LandingTables_<#=sourceDatabaseID#>" DelayValidation="true">
+                    <ExternalProjectPackage Package="Deploy_LandingTables_<#=sourceDatabaseID#>.dtsx"></ExternalProjectPackage>
+                </ExecutePackage>    
+                <ExecutePackage Name="EPT Run Deploy_DWSchemata_<#=sourceDatabaseID#>" DelayValidation="true">
+                    <ExternalProjectPackage Package="Deploy_DWSchemata_<#=sourceDatabaseID#>.dtsx"></ExternalProjectPackage>
+                </ExecutePackage>    
+                <ExecutePackage Name="EPT Run Deploy_DWTables_<#=sourceDatabaseID#>" DelayValidation="true">
+                    <ExternalProjectPackage Package="Deploy_DWTables_<#=sourceDatabaseID#>.dtsx"></ExternalProjectPackage>
+                </ExecutePackage>    
+            </Tasks>
+        </Package>
+        <#
+            }
+        #>
+    </Packages>
+</Biml>
+<#@template language="C#" hostspecific="true"#>
+<#@import namespace="System.Data" #>

@@ -42,28 +42,34 @@ GO
 
 CREATE TABLE Setup.SourceDatabases (
 	SourceDatabaseID TINYINT NOT NULL IDENTITY (1, 1) CONSTRAINT PK_Setup_SourceDatabases PRIMARY KEY CLUSTERED,
-	LandingSchema sysname NOT NULL,
 	SourceInstance NVARCHAR(40) NOT NULL,
 	SourceDatabase sysname NOT NULL,
 	SourceConnectionName NVARCHAR(40) NOT NULL,
-	SourceConnectionString NVARCHAR(255) NOT NULL
+	SourceConnectionString NVARCHAR(255) NOT NULL,
+	DestinationDatabase sysname NOT NULL,
+	DestinationConnectionString NVARCHAR(255) NOT NULL,
+	DestinationLandingSchema sysname NOT NULL
 );
 GO
 
 INSERT INTO Setup.SourceDatabases
 (
-    LandingSchema,
     SourceInstance,
     SourceDatabase,
 	SourceConnectionName,
-	SourceConnectionString
+	SourceConnectionString,
+	DestinationDatabase,
+	DestinationConnectionString,
+    DestinationLandingSchema
 )
 SELECT
-	N'Landing_WWI',
 	N'(local)\SQL2016',
 	N'WideWorldImporters',
 	N'WideWorldImporters',
-	N'Data Source=METRADW;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;';
+	N'Data Source=(local)\SQL2016;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;',
+	N'WWIDW',
+	N'Data Source=(local)\SQL2016;Initial Catalog=WWIDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;',
+	N'Landing_WWI';
 GO
 
 IF OBJECT_ID(N'Setup.SourceTables', N'U') IS NOT NULL
@@ -77,7 +83,10 @@ CREATE TABLE Setup.SourceTables (
 	SourceDatabaseID TINYINT NOT NULL CONSTRAINT FK_Setup_SourceTables_SourceDatabaseID FOREIGN KEY REFERENCES Setup.SourceDatabases (SourceDatabaseID),
 	SourceSchema sysname NOT NULL,
 	SourceTable sysname NOT NULL,
-	UseForDataWarehouse BIT NOT NULL CONSTRAINT DFT_Setup_SourceTables_UseForDataWarehouse DEFAULT (0)
+	UseForDataWarehouse BIT NOT NULL CONSTRAINT DFT_Setup_SourceTables_UseForDataWarehouse DEFAULT (0),
+	PublishToDataWarehouse BIT NOT NULL CONSTRAINT DFT_Setup_SourceTables_PublishToDataWarehouse DEFAULT (0),
+	DataWarehouseSchema sysname NOT NULL CONSTRAINT DFT_Setup_SourceTables_DataWarehouseSchema DEFAULT (N''),
+	DataWarehouseTable sysname NOT NULL CONSTRAINT DFT_Setup_SourceTables_DataWarehouseTable DEFAULT (N'')
 );
 GO
 
@@ -88,7 +97,7 @@ INSERT INTO Setup.SourceTables
     SourceTable
 )
 SELECT
-	1,
+	(SELECT SourceDatabaseID FROM Setup.SourceDatabases WHERE SourceDatabase = N'WideWorldImporters'),
 	S.name,
 	T.name
 
@@ -111,7 +120,11 @@ CREATE TABLE Setup.SourceColumns (
 	SourceTable sysname NOT NULL,
 	SourceColumn sysname NOT NULL,
 	UseForDataWarehouse BIT NOT NULL CONSTRAINT DFT_Setup_SourceColumns_UseForDataWarehouse DEFAULT (0),
-	IsPrimaryKey BIT NOT NULL CONSTRAINT DFT_Setup_SourceColumns_IsPrimaryKey DEFAULT (0)
+	IsPrimaryKey BIT NOT NULL CONSTRAINT DFT_Setup_SourceColumns_IsPrimaryKey DEFAULT (0),
+	PublishToDataWarehouse BIT NOT NULL CONSTRAINT DFT_Setup_SourceColumns_PublishToDataWarehouse DEFAULT (0),
+	DataWarehouseSchema sysname NOT NULL CONSTRAINT DFT_Setup_SourceColumns_DataWarehouseSchema DEFAULT (N''),
+	DataWarehouseTable sysname NOT NULL CONSTRAINT DFT_Setup_SourceColumns_DataWarehouseTable DEFAULT (N''),
+	DataWarehouseColumn sysname NOT NULL CONSTRAINT DFT_Setup_SourceColumns_DataWarehouseColumn DEFAULT (N'')
 );
 GO
 
